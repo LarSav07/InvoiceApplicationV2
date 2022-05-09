@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-//@Request-body converts json to department object
+//@Request-body converts json to invoice object
 
 
 @RestController
