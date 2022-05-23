@@ -1,4 +1,4 @@
-package com.invoice.Exceptions;
+package com.invoice.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

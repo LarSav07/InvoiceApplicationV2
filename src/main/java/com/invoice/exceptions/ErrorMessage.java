@@ -1,4 +1,4 @@
-package com.invoice.Exceptions;
+package com.invoice.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

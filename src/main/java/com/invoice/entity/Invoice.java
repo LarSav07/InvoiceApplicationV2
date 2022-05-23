@@ -10,8 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
-import java.math.BigDecimal;
-import java.util.Date;
 
 @Entity
 @Data
@@ -38,7 +36,7 @@ public class Invoice {
 
     @NotBlank(message = "Please Add Company Name")
     private String companyName;
-    private String CompanyAddress;
+    private String companyAddress;
     private String emailAddress;
 
     // todo:  add other fields - should have products quantity etc

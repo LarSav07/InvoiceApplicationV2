@@ -2,7 +2,7 @@ package com.invoice.service;
 
 
 import com.invoice.entity.Invoice;
-import com.invoice.Exceptions.InvoiceNotFoundException;
+import com.invoice.exceptions.InvoiceNotFoundException;
 import com.invoice.repository.InvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,8 +40,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoiceRepository.deleteById(invoiceNumber);
     }
 
-
-
     // check equalsIgnoreCase
     //if not empty and not null
     @Override
@@ -65,11 +63,12 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceRepository.save(depDB);
     }
 
-
     // the ignoreCase can be removed
     // https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods
     @Override
     public Invoice fetchInvoiceByCompanyName(String companyName) {
         return invoiceRepository.findByCompanyNameIgnoreCase(companyName);
     }
+
+
 }
