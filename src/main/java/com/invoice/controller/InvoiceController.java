@@ -1,10 +1,9 @@
 package com.invoice.controller;
 
-import com.invoice.InvoicePDFExporter;
+import com.invoice.service.InvoicePDFExporter;
 import com.invoice.entity.Invoice;
 import com.invoice.exceptions.InvoiceNotFoundException;
 import com.invoice.service.InvoiceService;
-import com.lowagie.text.pdf.PdfGState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
