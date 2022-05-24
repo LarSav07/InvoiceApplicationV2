@@ -33,7 +33,6 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
         return cell;
     }
 
-
     private void writeHeaderTable(PdfPTable table) throws IOException {
         PdfPCell cell = new PdfPCell();
 
@@ -49,8 +48,14 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
 //        logo.setAlignment(logo.ALIGN_LEFT);
 
         Paragraph header = new Paragraph("Faktura", fontHeader);
-
         PdfPTable nestedTable = new PdfPTable(3);
+
+        PdfPTable fakturaSubTable = new PdfPTable(1);
+        PdfPTable fakturaSubTableInputs = new PdfPTable(1);
+        PdfPTable nestedTableCompanyAddress = new PdfPTable(1);
+
+
+
         nestedTable.getDefaultCell().setBorder(0);
         nestedTable.addCell(header);
         nestedTable.addCell(new Phrase(""));
@@ -92,23 +97,26 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
 
     private void writeInvoiceTable(PdfPTable table) {
         PdfPCell cell = new PdfPCell();
-
         cell.setBorder(Rectangle.BOTTOM | Rectangle.TOP);
 
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Regular.ttf");
+        Font font2 = FontFactory.getFont("Lato-Regular");
+        //todo: change font in doc
+
         Font font = new Font(Font.HELVETICA, 11, Font.NORMAL, Color.BLACK);
-        cell.setPhrase(new Phrase("Artnr", font));
+        cell.setPhrase(new Phrase("Artnr", font2));
         table.addCell(cell);
 
-        cell.setPhrase(new Phrase("Benämning", font));
+        cell.setPhrase(new Phrase("Benämning", font2));
         table.addCell(cell);
         // todo change to 5 columns and uncomment when we have a DB table connected
 //        cell.setPhrase(new Phrase("Lev ant", font));
 //        table.addCell(cell);
 
-        cell.setPhrase(new Phrase("A-pris", font));
+        cell.setPhrase(new Phrase("A-pris", font2));
         table.addCell(cell);
 
-        cell.setPhrase(new Phrase("Summa", font));
+        cell.setPhrase(new Phrase("Summa", font2));
         table.addCell(cell);
     }
 
