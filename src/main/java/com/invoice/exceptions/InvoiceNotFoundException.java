@@ -1,4 +1,4 @@
-package com.invoice.Exceptions;
+package com.invoice.exceptions;
 
 public class InvoiceNotFoundException extends Exception{
     public InvoiceNotFoundException() {

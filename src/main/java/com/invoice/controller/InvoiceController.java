@@ -1,21 +1,26 @@
 package com.invoice.controller;
 
+import com.invoice.service.InvoicePDFExporter;
 import com.invoice.entity.Invoice;
-import com.invoice.Exceptions.InvoiceNotFoundException;
+import com.invoice.exceptions.InvoiceNotFoundException;
 import com.invoice.service.InvoiceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 //@Request-body converts json to invoice object
 
 
 @RestController
 public class InvoiceController {
-
     @Autowired
     private InvoiceService invoiceService;
 
@@ -59,5 +64,24 @@ public class InvoiceController {
     }
 
     // todo: complete other endpoints
+
+    // Export to PDF
+    @GetMapping("/invoices/export")
+    public void exportToPDF(HttpServletResponse response) throws IOException {
+        response.setContentType("/application/pdf");
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd:HH:mm:ss");
+        String currentDateTime = dateFormat.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
+
+        response.setHeader(headerKey, headerValue);
+
+        List<Invoice> listInvoices = invoiceService.fetchInvoiceList();
+
+        InvoicePDFExporter exporter = new InvoicePDFExporter(listInvoices);
+        exporter.export(response);
+    }
 
 }

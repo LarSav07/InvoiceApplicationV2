@@ -1,7 +1,7 @@
 package com.invoice.service;
 
 import com.invoice.entity.Invoice;
-import com.invoice.Exceptions.InvoiceNotFoundException;
+import com.invoice.exceptions.InvoiceNotFoundException;
 
 import java.util.List;
 
