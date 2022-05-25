@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 // https://knpcode.com/java-programs/generating-pdf-java-using-openpdf-tutorial/
@@ -21,53 +22,102 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
     private final List<Invoice> listInvoices;
 
     // todo: font use Lato
-    // todo: logo and first table should be side by side
     //https://stackoverflow.com/questions/29575142/how-to-align-two-paragraphs-to-the-left-and-right-on-the-same-line
-    //
 
 
-    private void writeHeaderTable(PdfPTable table) throws IOException {
-
-        Font tableFont = FontFactory.getFont(FontFactory.HELVETICA);
-        tableFont.setColor(Color.BLACK);
-        tableFont.setSize(10);
-
-        PdfPCell cell = new PdfPCell();
-        // Sets the lines for the Table
-        cell.setPadding(5);
-        cell.setBorder(Rectangle.NO_BORDER);
-
-        //todo: Create method that returns Image in cell
+    private static PdfPCell createLogoCell() throws IOException {
         Image logo = Image.getInstance("src/main/java/com/invoice/images/ZeroEight.png");
         logo.setAlignment(logo.ALIGN_LEFT);
         logo.scalePercent(25, 25);
-        table.addCell(logo);
+        PdfPCell cell = new PdfPCell(logo, true);
+        cell.setBorder(Rectangle.NO_BORDER);
+        return cell;
+    }
 
-        Font fontHeader = new Font(Font.HELVETICA, 16, Font.BOLD, Color.BLACK);
+    private void writeHeaderTable(PdfPTable table) throws IOException {
+        PdfPCell cell = new PdfPCell();
+
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Regular.ttf");
+        Font tableFont = FontFactory.getFont("Lato-Regular");
+        tableFont.setSize(9);
+
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Bold.ttf");
+        Font fontHeader = FontFactory.getFont("Lato-Bold");
+        fontHeader.setSize(16);
+
+
+        cell.setBorder(Rectangle.NO_BORDER);
+        table.addCell(createLogoCell());
+
+//        // NOT SURE IF STATIC METHOD IS BETTER
+//        Image logo = Image.getInstance("src/main/java/com/invoice/images/ZeroEight.png");
+//        logo.setAlignment(logo.ALIGN_LEFT);
+
         Paragraph header = new Paragraph("Faktura", fontHeader);
-        header.setAlignment(Element.ALIGN_RIGHT); // Not working
-
         PdfPTable nestedTable = new PdfPTable(3);
+
+        PdfPTable fakturaSubTable = new PdfPTable(1);
+        fakturaSubTable.getDefaultCell().setBorder(0);
+        fakturaSubTable.addCell(new Phrase("Fakturadatum", tableFont));
+        fakturaSubTable.addCell(new Phrase("Fakturanr", tableFont));
+        fakturaSubTable.addCell(new Phrase("OCR", tableFont));
+
+        // Dummy Variables
+
+        String dummyDate = "2022-05-02";
+        String dummyNr = "41";
+        String dummyOCR = "4143";
+
+        PdfPTable fakturaSubTableInputs = new PdfPTable(1);
+        cell.setPhrase(new Phrase(dummyDate,tableFont));
+        fakturaSubTableInputs.addCell(cell);
+        cell.setPhrase(new Phrase(dummyNr,tableFont));
+        fakturaSubTableInputs.addCell(cell);
+        cell.setPhrase(new Phrase(dummyOCR,tableFont));
+        fakturaSubTableInputs.addCell(cell);
+
+        // Dummy Variables
+
+        String companyName = "eWork Group Ab";
+        String lineOne = "Line 1";
+        String lineTwo = "Line 2";
+        String country = "Sverige";
+
+        PdfPTable companyNameAddressSubTable = new PdfPTable(1);
+        cell.setPhrase(new Phrase(companyName,tableFont));
+        companyNameAddressSubTable.addCell(cell);
+        cell.setPhrase(new Phrase(lineOne,tableFont));
+        companyNameAddressSubTable.addCell(cell);
+        cell.setPhrase(new Phrase(lineTwo,tableFont));
+        companyNameAddressSubTable.addCell(cell);
+        cell.setPhrase(new Phrase(country,tableFont));
+        companyNameAddressSubTable.addCell(cell);
+
 
         nestedTable.getDefaultCell().setBorder(0);
         nestedTable.addCell(header);
         nestedTable.addCell(new Phrase(""));
         nestedTable.addCell(new Phrase(""));
         nestedTable.addCell(new Phrase(""));
-        nestedTable.addCell(new Phrase("\nFakturadatum"+" \nFakturanr \nOCR", tableFont));
-        nestedTable.addCell(new Phrase("")); // will take the 3 variables above
-        nestedTable.addCell(new Phrase("Company Name" + "\nLine 1" + "\nLine 2" + "\nLine 3", tableFont));
-        nestedTable.addCell(new Phrase(""));
-        nestedTable.addCell(new Phrase(""));
 
+
+        nestedTable.addCell(fakturaSubTable);
+        nestedTable.addCell(fakturaSubTableInputs);
+        nestedTable.addCell(companyNameAddressSubTable);
+
+
+        nestedTable.addCell(new Phrase("")); // will take the 3 variables above
+        nestedTable.addCell(new Phrase(""));
+        nestedTable.addCell(new Phrase(""));
         table.addCell(nestedTable);
     }
 
     private void writeReferenceTable(PdfPTable table) {
 
-        Font tableFont = FontFactory.getFont(FontFactory.HELVETICA);
-        tableFont.setColor(Color.BLACK);
-        tableFont.setSize(11);
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Regular.ttf");
+        Font tableFont = FontFactory.getFont("Lato-Regular");
+        tableFont.setSize(10);
+
 
         table.addCell(new Phrase("Kundnr",tableFont));
         table.addCell(new Phrase("Some number",tableFont));
@@ -93,16 +143,15 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
 
     private void writeInvoiceTable(PdfPTable table) {
         PdfPCell cell = new PdfPCell();
-        cell.setBackgroundColor(Color.WHITE); //colour change later
-        cell.setPadding(5);
         cell.setBorder(Rectangle.BOTTOM | Rectangle.TOP);
 
-        // Font
-        Font font = FontFactory.getFont(FontFactory.HELVETICA);
-        font.setColor(Color.BLACK); // Font colour change
-        font.setSize(12);
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Regular.ttf");
+        Font font = FontFactory.getFont("Lato-Regular");
+        font.setSize(11);
 
-        cell.setPhrase(new Phrase("Artnr", font));
+        //todo: change font in doc
+
+
         table.addCell(cell);
 
         cell.setPhrase(new Phrase("Benämning", font));
@@ -119,30 +168,51 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
     }
 
     private void writeInvoiceTableData(PdfPTable table) {
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Regular.ttf");
+        Font font = FontFactory.getFont("Lato-Regular");
+        font.setSize(11);
+
+        PdfPCell cell = new PdfPCell();
+        cell.setBorder(Rectangle.NO_BORDER);
+        table.getDefaultCell().setBorder(Rectangle.NO_BORDER);
         for (Invoice invoice : listInvoices) {
-            table.addCell(String.valueOf(invoice.getInvoiceNumber()));
-            table.addCell(invoice.getCompanyAddress());
-            table.addCell(invoice.getCompanyName());
-            table.addCell(invoice.getEmailAddress());
+            cell.setPhrase(new Phrase(String.valueOf(invoice.getInvoiceNumber()),font));
+            table.addCell(cell);
+            cell.setPhrase(new Phrase(String.valueOf(invoice.getCompanyAddress()),font));
+            table.addCell(cell);
+            cell.setPhrase(new Phrase(String.valueOf(invoice.getCompanyName()),font));
+            table.addCell(cell);
+            cell.setPhrase(new Phrase(String.valueOf(invoice.getEmailAddress()),font));
+            table.addCell(cell);
         }
+//        for (Invoice invoice : listInvoices) {
+//            table.addCell(String.valueOf(invoice.getInvoiceNumber()));
+//            table.addCell(invoice.getCompanyAddress());
+//            table.addCell(invoice.getCompanyName());
+//            table.addCell(invoice.getEmailAddress());
+//        }
     }
 
     private void writeSummaryTable(PdfPTable table) {
         PdfPCell cell = new PdfPCell();
-        PdfPCell cell1 = new PdfPCell();
+        PdfPCell cell1 = new PdfPCell(); // 2 instances so we get bottom underline
 
-        cell.setPadding(5);
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Regular.ttf");
+        Font font = FontFactory.getFont("Lato-Regular");
+        font.setSize(11);
+
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Bold.ttf");
+        Font attBatalaHeaderFont = FontFactory.getFont("Lato-Bold");
+        attBatalaHeaderFont.setSize(11);
+
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Bold.ttf");
+        Font attBatalaFont = FontFactory.getFont("Lato-Bold");
+        attBatalaFont.setSize(12);
+
         cell.setBorder(Rectangle.TOP);
-
-        cell1.setPadding(5);
         cell1.setBorder(Rectangle.BOTTOM);
-        Font font = FontFactory.getFont(FontFactory.HELVETICA);
-        font.setColor(Color.BLACK); // Font colour change
-        Font attBatalaHeaderFont = new Font(Font.HELVETICA, 11, Font.BOLD, Color.BLACK);
-        Font attBatalaFont = new Font(Font.HELVETICA, 12, Font.BOLD, Color.BLACK);
 
         table.setWidthPercentage(100);
-        //table.getDefaultCell().setBorder(0);
 
         cell.setPhrase(new Phrase("Exkl. moms", font));
         table.addCell(cell);
@@ -168,64 +238,104 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
         cell1.setPhrase(new Phrase("SEK"+" 165 125,00", attBatalaFont));
         table.addCell(cell1);
 
-        // todo: need a line at the bottom
-
     }
     private void writeBankTable(PdfPTable table) {
         PdfPCell cell = new PdfPCell();
 
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Regular.ttf");
+        Font font = FontFactory.getFont("Lato-Regular");
+        font.setSize(11);
+
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Bold.ttf");
+        Font fontBold = FontFactory.getFont("Lato-Bold");
+        fontBold.setSize(11);
+
         // Sets the lines for the Table
-        cell.setBackgroundColor(Color.WHITE); //colour change later
-        cell.setPadding(5);
         cell.setBorder(Rectangle.NO_BORDER);
 
-        Font font = FontFactory.getFont(FontFactory.HELVETICA);
-        font.setColor(Color.BLACK); // Font colour change
-
         table.setWidthPercentage(100);
-        // todo: padding
 
-        int mons = 25;
-        cell.setPhrase(new Phrase("Moms "+mons+"%", font));
+        double monsRate= 25;
+        double mons = 33066.09;
+        cell.setPhrase(new Phrase("Moms "+monsRate+"% "+mons, font));
         table.addCell(cell);
-        cell.setPhrase(new Phrase("Moms", font));
+        cell.setPhrase(new Phrase("IBAN", fontBold));
         table.addCell(cell);
-        table.completeRow();
+        cell.setPhrase(new Phrase("BIC", fontBold));
+        table.addCell(cell);
     }
 
     private void writeContactInfo(PdfPTable table) {
         PdfPCell cell = new PdfPCell();
 
-        // Sets the lines for the Table
-        cell.setBackgroundColor(Color.WHITE); //colour change later
-        cell.setPadding(5);
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Regular.ttf");
+        Font font = FontFactory.getFont("Lato-Regular");
+        font.setSize(10);
+
         cell.setBorder(Rectangle.NO_BORDER);
-
-        Font font = FontFactory.getFont(FontFactory.HELVETICA);
-        font.setColor(Color.BLACK); // Font colour change
-
+        table.getDefaultCell().setBorder(Rectangle.NO_BORDER);
         table.setWidthPercentage(100);
+
         // todo: padding
 
-        int mons = 25;
-        cell.setPhrase(new Phrase("Adress \nZero8 AB \nGripens väg 15 \n14635 TULLINGE \nSverige"));
-        table.addCell(cell);
-        cell.setPhrase(new Phrase("Moms", font));
-        table.addCell(cell);
-        cell.setPhrase(new Phrase("Moms "+mons+"%", font));
-        table.addCell(cell);
-        cell.setPhrase(new Phrase("Moms", font));
-        table.addCell(cell);
+        PdfPTable addressTable = new PdfPTable(1);
+        addressTable.getDefaultCell().setBorder(Rectangle.NO_BORDER);
 
-        table.completeRow();
+        cell.setPhrase(new Phrase("Adress", font));
+        addressTable.addCell(cell);
+        cell.setPhrase(new Phrase("Zero8 AB", font));
+        addressTable.addCell(cell);
+        cell.setPhrase(new Phrase("Gripens väg 15", font));
+        addressTable.addCell(cell);
+        cell.setPhrase(new Phrase("TULLINGE", font));
+        addressTable.addCell(cell);
+        cell.setPhrase(new Phrase("Sverige", font));
+        addressTable.addCell(cell);
+        table.addCell(addressTable);
+
+        PdfPTable phoneAndEmailTable = new PdfPTable(1);
+        phoneAndEmailTable.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+        cell.setPhrase(new Phrase("Telefon", font));
+        phoneAndEmailTable.addCell(cell);
+        cell.setPhrase(new Phrase("343-443434", font));
+        phoneAndEmailTable.addCell(cell);
+        cell.setPhrase(new Phrase("E-post", font));
+        phoneAndEmailTable.addCell(cell);
+        cell.setPhrase(new Phrase("Email@Email.se", font));
+        phoneAndEmailTable.addCell(cell);
+        table.addCell(phoneAndEmailTable);
+
+
+        PdfPTable bankgiroTable = new PdfPTable(1);
+        bankgiroTable.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+        cell.setPhrase(new Phrase("Bankgiro", font));
+        bankgiroTable.addCell(cell);
+        cell.setPhrase(new Phrase("555-555", font));
+        bankgiroTable.addCell(cell);
+        table.addCell(bankgiroTable);
+
+        PdfPTable organisationTable = new PdfPTable(1);
+        organisationTable.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+        cell.setPhrase(new Phrase("Organisationsnr", font));
+        organisationTable.addCell(cell);
+        cell.setPhrase(new Phrase("558745-1458", font));
+        organisationTable.addCell(cell);
+        cell.setPhrase(new Phrase("Momsreg. nr", font));
+        organisationTable.addCell(cell);
+        cell.setPhrase(new Phrase("SE125684523652", font));
+        organisationTable.addCell(cell);
+        cell.setPhrase(new Phrase("GodKänd för F-skatt", font));
+        organisationTable.addCell(cell);
+        table.addCell(organisationTable);
+
     }
 
     private HeaderFooter footer (Document document) {
         // headers and footers must be added before the document is opened
         int numberOfPages = document.getPageNumber(); //todo: total page numbers in ()
 
-        Font font = FontFactory.getFont(FontFactory.HELVETICA);
-        font.setColor(Color.BLACK); // Font colour change
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Regular.ttf");
+        Font font = FontFactory.getFont("Lato-Regular");
         font.setSize(8);
 
         //HeaderFooter pageNumber = new HeaderFooter(new Phrase("Sida ("+numberOfPages+")", new Font(font)), true );
@@ -234,7 +344,6 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
         pageNumber.setAlignment(Element.ALIGN_RIGHT);
         return pageNumber;
     }
-
 
     public void export(HttpServletResponse response) throws IOException {
         Document document = new Document(PageSize.A4 , 50, 50, 50, 50);
@@ -250,14 +359,12 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
         headerTable.setSpacingAfter(30f);
         writeHeaderTable(headerTable);
 
-
         // reference table
         PdfPTable referenceTable = new PdfPTable(4);
         referenceTable.setWidthPercentage(100);
         referenceTable.getDefaultCell().setBorder(0); // removes borderline
         referenceTable.setSpacingAfter(10f);
         writeReferenceTable(referenceTable);
-
 
         // Main Table
         // todo change to 5 columns when we have a DB table connected
@@ -277,22 +384,23 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
         summaryTable.setSpacingAfter(5);
         writeSummaryTable(summaryTable);
 
-        //
-        PdfPTable table4 = new PdfPTable(2);
-        writeBankTable(table4);
+        // Bank Table
+        PdfPTable bankTable = new PdfPTable(3);
+        writeBankTable(bankTable);
 
-        //
-        PdfPTable table5 = new PdfPTable(4);
-        writeContactInfo(table5);
+        // Contact information Table
+        PdfPTable contactInfoTable = new PdfPTable(4);
+        writeContactInfo(contactInfoTable);
+        contactInfoTable.setSpacingBefore(5);
+
 
         // document build
         document.add(headerTable);
         document.add(referenceTable);
         document.add(invoiceTable);
         document.add(summaryTable);
-        document.add(table4);
-        document.add(table5);
-
+        document.add(bankTable);
+        document.add(contactInfoTable);
         document.close();
     }
 
