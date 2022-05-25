@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 // https://knpcode.com/java-programs/generating-pdf-java-using-openpdf-tutorial/
@@ -36,10 +37,15 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
     private void writeHeaderTable(PdfPTable table) throws IOException {
         PdfPCell cell = new PdfPCell();
 
-        Font tableFont = new Font(Font.HELVETICA, 10, Font.NORMAL, Color.BLACK);
-        Font fontHeader = new Font(Font.HELVETICA, 16, Font.BOLD, Color.BLACK);
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Regular.ttf");
+        Font tableFont = FontFactory.getFont("Lato-Regular");
+        tableFont.setSize(9);
 
-        cell.setPadding(5);
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Bold.ttf");
+        Font fontHeader = FontFactory.getFont("Lato-Bold");
+        fontHeader.setSize(16);
+
+
         cell.setBorder(Rectangle.NO_BORDER);
         table.addCell(createLogoCell());
 
@@ -51,9 +57,41 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
         PdfPTable nestedTable = new PdfPTable(3);
 
         PdfPTable fakturaSubTable = new PdfPTable(1);
-        PdfPTable fakturaSubTableInputs = new PdfPTable(1);
-        PdfPTable nestedTableCompanyAddress = new PdfPTable(1);
+        fakturaSubTable.getDefaultCell().setBorder(0);
+        fakturaSubTable.addCell(new Phrase("Fakturadatum", tableFont));
+        fakturaSubTable.addCell(new Phrase("Fakturanr", tableFont));
+        fakturaSubTable.addCell(new Phrase("OCR", tableFont));
 
+        // Dummy Variables
+
+        String dummyDate = "2022-05-02";
+        String dummyNr = "41";
+        String dummyOCR = "4143";
+
+        PdfPTable fakturaSubTableInputs = new PdfPTable(1);
+        cell.setPhrase(new Phrase(dummyDate,tableFont));
+        fakturaSubTableInputs.addCell(cell);
+        cell.setPhrase(new Phrase(dummyNr,tableFont));
+        fakturaSubTableInputs.addCell(cell);
+        cell.setPhrase(new Phrase(dummyOCR,tableFont));
+        fakturaSubTableInputs.addCell(cell);
+
+        // Dummy Variables
+
+        String companyName = "eWork Group Ab";
+        String lineOne = "Line 1";
+        String lineTwo = "Line 2";
+        String country = "Sverige";
+
+        PdfPTable companyNameAddressSubTable = new PdfPTable(1);
+        cell.setPhrase(new Phrase(companyName,tableFont));
+        companyNameAddressSubTable.addCell(cell);
+        cell.setPhrase(new Phrase(lineOne,tableFont));
+        companyNameAddressSubTable.addCell(cell);
+        cell.setPhrase(new Phrase(lineTwo,tableFont));
+        companyNameAddressSubTable.addCell(cell);
+        cell.setPhrase(new Phrase(country,tableFont));
+        companyNameAddressSubTable.addCell(cell);
 
 
         nestedTable.getDefaultCell().setBorder(0);
@@ -61,9 +99,14 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
         nestedTable.addCell(new Phrase(""));
         nestedTable.addCell(new Phrase(""));
         nestedTable.addCell(new Phrase(""));
-        nestedTable.addCell(new Phrase("\nFakturadatum"+" \nFakturanr \nOCR", tableFont));
+
+
+        nestedTable.addCell(fakturaSubTable);
+        nestedTable.addCell(fakturaSubTableInputs);
+        nestedTable.addCell(companyNameAddressSubTable);
+
+
         nestedTable.addCell(new Phrase("")); // will take the 3 variables above
-        nestedTable.addCell(new Phrase("Company Name" + "\nLine 1" + "\nLine 2" + "\nLine 3", tableFont));
         nestedTable.addCell(new Phrase(""));
         nestedTable.addCell(new Phrase(""));
         table.addCell(nestedTable);
@@ -71,7 +114,10 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
 
     private void writeReferenceTable(PdfPTable table) {
 
-        Font tableFont = new Font(Font.HELVETICA, 10, Font.NORMAL, Color.BLACK);
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Regular.ttf");
+        Font tableFont = FontFactory.getFont("Lato-Regular");
+        tableFont.setSize(10);
+
 
         table.addCell(new Phrase("Kundnr",tableFont));
         table.addCell(new Phrase("Some number",tableFont));
@@ -100,28 +146,32 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
         cell.setBorder(Rectangle.BOTTOM | Rectangle.TOP);
 
         FontFactory.register("src/main/java/com/invoice/Font/Lato-Regular.ttf");
-        Font font2 = FontFactory.getFont("Lato-Regular");
+        Font font = FontFactory.getFont("Lato-Regular");
+        font.setSize(11);
+
         //todo: change font in doc
 
-        Font font = new Font(Font.HELVETICA, 11, Font.NORMAL, Color.BLACK);
-        cell.setPhrase(new Phrase("Artnr", font2));
+
         table.addCell(cell);
 
-        cell.setPhrase(new Phrase("Benämning", font2));
+        cell.setPhrase(new Phrase("Benämning", font));
         table.addCell(cell);
         // todo change to 5 columns and uncomment when we have a DB table connected
 //        cell.setPhrase(new Phrase("Lev ant", font));
 //        table.addCell(cell);
 
-        cell.setPhrase(new Phrase("A-pris", font2));
+        cell.setPhrase(new Phrase("A-pris", font));
         table.addCell(cell);
 
-        cell.setPhrase(new Phrase("Summa", font2));
+        cell.setPhrase(new Phrase("Summa", font));
         table.addCell(cell);
     }
 
     private void writeInvoiceTableData(PdfPTable table) {
-        Font font = new Font(Font.HELVETICA, 11, Font.NORMAL, Color.BLACK);
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Regular.ttf");
+        Font font = FontFactory.getFont("Lato-Regular");
+        font.setSize(11);
+
         PdfPCell cell = new PdfPCell();
         cell.setBorder(Rectangle.NO_BORDER);
         table.getDefaultCell().setBorder(Rectangle.NO_BORDER);
@@ -147,13 +197,19 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
         PdfPCell cell = new PdfPCell();
         PdfPCell cell1 = new PdfPCell(); // 2 instances so we get bottom underline
 
-        Font font = new Font(Font.HELVETICA, 11, Font.NORMAL, Color.BLACK);
-        Font attBatalaHeaderFont = new Font(Font.HELVETICA, 11, Font.BOLD, Color.BLACK);
-        Font attBatalaFont = new Font(Font.HELVETICA, 12, Font.BOLD, Color.BLACK);
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Regular.ttf");
+        Font font = FontFactory.getFont("Lato-Regular");
+        font.setSize(11);
 
-        cell.setPadding(5);
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Bold.ttf");
+        Font attBatalaHeaderFont = FontFactory.getFont("Lato-Bold");
+        attBatalaHeaderFont.setSize(11);
+
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Bold.ttf");
+        Font attBatalaFont = FontFactory.getFont("Lato-Bold");
+        attBatalaFont.setSize(12);
+
         cell.setBorder(Rectangle.TOP);
-        cell1.setPadding(5);
         cell1.setBorder(Rectangle.BOTTOM);
 
         table.setWidthPercentage(100);
@@ -185,8 +241,14 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
     }
     private void writeBankTable(PdfPTable table) {
         PdfPCell cell = new PdfPCell();
-        Font font = new Font(Font.HELVETICA, 11, Font.NORMAL, Color.BLACK);
-        Font fontBold = new Font(Font.HELVETICA, 11, Font.BOLD, Color.BLACK);
+
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Regular.ttf");
+        Font font = FontFactory.getFont("Lato-Regular");
+        font.setSize(11);
+
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Bold.ttf");
+        Font fontBold = FontFactory.getFont("Lato-Bold");
+        fontBold.setSize(11);
 
         // Sets the lines for the Table
         cell.setBorder(Rectangle.NO_BORDER);
@@ -205,7 +267,10 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
 
     private void writeContactInfo(PdfPTable table) {
         PdfPCell cell = new PdfPCell();
-        Font font = new Font(Font.HELVETICA, 10, Font.NORMAL, Color.BLACK);
+
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Regular.ttf");
+        Font font = FontFactory.getFont("Lato-Regular");
+        font.setSize(10);
 
         cell.setBorder(Rectangle.NO_BORDER);
         table.getDefaultCell().setBorder(Rectangle.NO_BORDER);
@@ -269,8 +334,8 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
         // headers and footers must be added before the document is opened
         int numberOfPages = document.getPageNumber(); //todo: total page numbers in ()
 
-        Font font = FontFactory.getFont(FontFactory.HELVETICA);
-        font.setColor(Color.BLACK); // Font colour change
+        FontFactory.register("src/main/java/com/invoice/Font/Lato-Regular.ttf");
+        Font font = FontFactory.getFont("Lato-Regular");
         font.setSize(8);
 
         //HeaderFooter pageNumber = new HeaderFooter(new Phrase("Sida ("+numberOfPages+")", new Font(font)), true );
@@ -327,6 +392,7 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
         PdfPTable contactInfoTable = new PdfPTable(4);
         writeContactInfo(contactInfoTable);
         contactInfoTable.setSpacingBefore(5);
+
 
         // document build
         document.add(headerTable);
