@@ -145,6 +145,7 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
         PdfPCell cell = new PdfPCell();
         cell.setBorder(Rectangle.BOTTOM | Rectangle.TOP);
 
+        // Not sure this is the best way to do this
         FontFactory.register("src/main/java/com/invoice/Font/Lato-Regular.ttf");
         Font font = FontFactory.getFont("Lato-Regular");
         font.setSize(11);
