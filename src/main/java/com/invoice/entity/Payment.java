@@ -18,24 +18,33 @@ public class Payment {
 
     @Id
     @SequenceGenerator(
-            name = "payment_sequence",
-            sequenceName = "payment_sequence",
+            name = "invoiceNumber_sequence",
+            sequenceName = "invoiceNumber_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "payment_sequence"
+            generator = "invoiceNumber_sequence"
     )
     private Long invoiceNumber;
     private String debtor;
     private String creditor;
-    private BigDecimal amount;
-    private BigDecimal AmountIncTax;
+    private double amount; // change to big decimal
+    private double amountIncTax; // change to big decimal
     private double tax;
     private double interest;
     private Long OCR;
+
+
     private Long statusId;
 
-    // todo: ADD Repositorys and add tests
+
+    @OneToOne(
+            mappedBy = "payment"
+    )
+    private PaymentStatus paymentStatus;
+
+
+    // todo: ADD Repository and add tests
 }
 // https://www.baeldung.com/spring-boot-bean-validation

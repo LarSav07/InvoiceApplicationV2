@@ -23,17 +23,16 @@ public class PaymentStatus {
             strategy = GenerationType.SEQUENCE,
             generator = "payment_status_sequence"
     )
-
+    private Long paymentStatusID;
     private String status; // Use an ENUM for status MAYBE? NO IDEA
 
     @OneToOne (
             cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            optional = false
+            fetch = FetchType.LAZY
     )
     @JoinColumn(
-            name = "status_Id",
-            referencedColumnName = "statusId")
+            name = "invoice_number",
+            referencedColumnName = "invoiceNumber")
     private Payment payment;
 
 }

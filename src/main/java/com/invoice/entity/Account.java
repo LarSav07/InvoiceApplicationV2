@@ -16,10 +16,19 @@ import javax.persistence.*;
 public class Account {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long accountID;
+    @SequenceGenerator(
+            name = "accountId_sequence",
+            sequenceName = "accountId_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "accountId_sequence"
+    )
+    private Long accountId;
     private Long BIC; // (Bank Identifier Code)
     private Long IBAN;
+    private String BankName;
 
 
 }
