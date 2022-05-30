@@ -45,7 +45,12 @@ public class AccountHolder {
                 referencedColumnName = "accountId")
     private Account account;
 
-//    @ManyToOne
-//    @JoinColumn(name = "invoice_number")
-//    private Payment payment;
+    @ManyToOne(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    @JoinColumn(name = "invoice_number",
+            referencedColumnName = "invoiceNumber"
+        )
+    private Payment payment;
 }

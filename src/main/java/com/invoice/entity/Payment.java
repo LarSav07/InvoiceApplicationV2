@@ -34,8 +34,6 @@ public class Payment {
     private double tax;
     private double interest;
     private Long OCR;
-
-
     private Long statusId;
 
 

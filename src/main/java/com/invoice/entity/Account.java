@@ -6,6 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 //@Embeddable
 @Entity
@@ -26,9 +30,11 @@ public class Account {
             generator = "accountId_sequence"
     )
     private Long accountId;
+
+    @NotEmpty(message = "BIC cannot be empty")
+    @NotNull(message = "Cannot be null")
+    @NotBlank(message = "Cannot be null")
     private Long BIC; // (Bank Identifier Code)
     private Long IBAN;
     private String BankName;
-
-
 }
