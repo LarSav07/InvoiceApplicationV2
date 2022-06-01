@@ -4,15 +4,13 @@ import lombok.*;
 
 import javax.persistence.*;
 
-// todo: dont use lombok
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(exclude = "payment")
-@Table(name = "payment_status")
-public class PaymentStatus {
+@Table(name = "product")
+public class Product {
 
     @Id
     @SequenceGenerator(
@@ -24,23 +22,25 @@ public class PaymentStatus {
             strategy = GenerationType.SEQUENCE,
             generator = "payment_status_sequence"
     )
-    private Long paymentStatusID;
+    private Long productId;
 
-    @Column(name = "payment_status")
-    @Enumerated(EnumType.STRING)
-    private PaymentStatusEnum paymentStatusEnum;
-    // Use an ENUM for status MAYBE? NO IDEA // might not be the best way but meh
-    //https://thorben-janssen.com/jpa-21-how-to-implement-type-converter/
-    // https://dzone.com/articles/mapping-enums-done-right
+    @Column(name= "product_name")
+    private Double productName;
+
+    @Column(name= "amount")
+    private Double amount;
+
+    @Column(name= "price")
+    private Double price;
 
 
-    @OneToOne (
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY
+    @ManyToOne(
+            cascade = CascadeType.ALL
     )
     @JoinColumn(
             name = "payment_id",
             referencedColumnName = "paymentId"
     )
     private Payment payment;
+
 }

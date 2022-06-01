@@ -6,51 +6,34 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "account_holder")
 public class AccountHolder {
 
     @Id
     @SequenceGenerator(
-            name = "accountHolderID_sequence",
-            sequenceName = "accountHolderID_sequence",
+            name = "accountHolderId_sequence",
+            sequenceName = "accountHolderId_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "accountHolderID_sequence"
+            generator = "accountHolderId_sequence"
     )
-    private Long accountHolderID;
+    private Long accountHolderId;
 
+    @Column(name="company_name")
     private String companyName;
+
+    @Column(name="customer_number")
     private Long customerNumber;
-    private String ourReference;
-    private String yourReference;
 
-    private String addressLine1;
-    private String addressLine2;
-    private String postCode;
-    private String city;
-    private String country;
 
-    @ManyToOne(
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY
-    )
-    @JoinColumn(name = "account_id",
-                referencedColumnName = "accountId")
-    private Account account;
 
-    @ManyToOne(
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY
-    )
-    @JoinColumn(name = "invoice_number",
-            referencedColumnName = "invoiceNumber"
-        )
-    private Payment payment;
 }
