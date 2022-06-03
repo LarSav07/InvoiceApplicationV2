@@ -1,15 +1,13 @@
 package com.invoice.entity;
 
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 // todo: dont use lombok
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -18,6 +16,7 @@ import java.util.Date;
 public class PaymentStatus {
 
     @Id
+    @Column(name = "payment_status_id")
     @SequenceGenerator(
             name = "payment_status_sequence",
             sequenceName = "payment_status_sequence",
@@ -32,21 +31,19 @@ public class PaymentStatus {
     @Column(name = "payment_status")
     @Enumerated(EnumType.STRING)
     private PaymentStatusEnum paymentStatusEnum;
-    // Use an ENUM for status MAYBE? NO IDEA // might not be the best way but meh
-    //https://thorben-janssen.com/jpa-21-how-to-implement-type-converter/
-    // https://dzone.com/articles/mapping-enums-done-right
 
-
-
-    // TODO: 02/06/2022 https://vladmihalcea.com/prepersist-preupdate-embeddable-jpa-hibernate/ 
-
-    @OneToOne (
+    @OneToOne(
             cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY
+            optional=false
     )
     @JoinColumn(
             name = "payment_id",
             referencedColumnName = "paymentId"
     )
     private Payment payment;
+    // Use an ENUM for status MAYBE? NO IDEA // might not be the best way but meh
+    //https://thorben-janssen.com/jpa-21-how-to-implement-type-converter/
+    // https://dzone.com/articles/mapping-enums-done-right
+    // TODO: 02/06/2022 https://vladmihalcea.com/prepersist-preupdate-embeddable-jpa-hibernate/ 
+
 }

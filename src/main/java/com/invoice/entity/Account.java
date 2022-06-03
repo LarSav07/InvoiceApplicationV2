@@ -1,9 +1,6 @@
 package com.invoice.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -13,7 +10,9 @@ import javax.validation.constraints.NotNull;
 
 //@Embeddable
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -21,6 +20,8 @@ import javax.validation.constraints.NotNull;
 public class Account {
 
     @Id
+    @Column(
+            name = "account_id")
     @SequenceGenerator(
             name = "accountId_sequence",
             sequenceName = "accountId_sequence",
@@ -32,32 +33,15 @@ public class Account {
     )
     private Long accountId;
 
-    @NotEmpty(message = "BIC cannot be empty")
-    @NotNull(message = "Cannot be null")
-    @NotBlank(message = "Cannot be null")
-    @Column(name="bank_identification_code")
+    @NotNull(message = "BIC cannot be empty")
+    @Column(name = "bank_identification_code")
     private Long BIC; // (Bank Identifier Code)
 
-    @NotEmpty(message = "IBAN cannot be empty")
-    @NotNull(message = "Cannot be null")
-    @NotBlank(message = "Cannot be null")
-    @Column(name="iban_number")
+    @NotNull(message = "IBAN cannot be empty")
+    @Column(name = "iban_number")
     private Long IBAN;
 
-    @Column(name="bank")
-    @NotEmpty(message = "IBAN cannot be empty")
-    @NotNull(message = "Cannot be null")
-    @NotBlank(message = "Cannot be null")
-    @Length(max = 10, min =3)
+    @Column(name = "bank_Name")
+    @Length(max = 10, min = 3)
     private String BankName;
-
-
-    @ManyToOne(
-            cascade = CascadeType.ALL
-    )
-    @JoinColumn(
-            name = "account_holder_id",
-            referencedColumnName = "accountHolderId"
-    )
-    private AccountHolder accountHolder;
 }

@@ -3,9 +3,13 @@ package com.invoice.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -22,6 +26,7 @@ public class Product {
             strategy = GenerationType.SEQUENCE,
             generator = "payment_status_sequence"
     )
+    @Column(name = "product_id")
     private Long productId;
 
     @Column(name= "product_name")
@@ -32,16 +37,4 @@ public class Product {
 
     @Column(name= "price")
     private Double price;
-
-
-    @ManyToOne(
-            cascade = CascadeType.ALL
-    )
-    @JoinColumn(
-            name = "payment_id",
-            referencedColumnName = "paymentId"
-    )
-    private Payment payment;
-
-    // todo need dates variable etc
 }

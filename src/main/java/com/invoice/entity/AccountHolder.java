@@ -1,15 +1,20 @@
 package com.invoice.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
-import java.util.Collection;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -28,12 +33,29 @@ public class AccountHolder {
     )
     private Long accountHolderId;
 
-    @Column(name="company_name")
+
+    @Column(name="company_name", unique = true)
     private String companyName;
 
-    @Column(name="customer_number")
+
+    @Column(name="customer_number", unique = true)
     private Long customerNumber;
 
+    @ManyToOne(
+            cascade = CascadeType.ALL
+    )
+    @JoinColumn(
+            name = "account_id",
+            referencedColumnName = "account_id"
+    )
+    private Account account;
 
-
+    @ManyToOne(
+            cascade = CascadeType.ALL
+    )
+    @JoinColumn(
+            name = "contact_Id",
+            referencedColumnName = "contact_Id"
+    )
+    private Contact contact;
 }

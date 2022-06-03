@@ -1,7 +1,9 @@
 package com.invoice.repository;
 
+import com.invoice.entity.AccountHolder;
 import com.invoice.entity.Payment;
 import com.invoice.entity.PaymentStatus;
+import com.invoice.entity.PaymentStatusEnum;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,25 +17,41 @@ class PaymentStatusRepositoryTest {
     private PaymentStatusRepository paymentStatusRepository;
 
     @Test
-    public void SavePaymentStatus() {
+    public void savePaymentStatusWithFKs() {
+        AccountHolder accCreditor =
+                AccountHolder.builder()
+                        .companyName("Testing")
+                        .customerNumber(2233L)
+                        .build();
+
+        AccountHolder accDebtor =
+                AccountHolder.builder()
+                        .companyName("Debtor")
+                        .customerNumber(356L)
+                        .build();
+
+
         Payment payment =
                 Payment.builder()
-                        .debtor("Test")
-                        .creditor("Test")
-                        .amount(1222.64)
-                        .amountIncTax(132.64)
-                        .tax(20)
-                        .OCR(4324L)
-                        .statusId(1L)
+                        .OCR(123L)
+                        .tax(25)
+                        .accountCreditor(accCreditor)
+                        .accountDebtor(accDebtor)
+                        .totalAmountIncludingTax(252)
+                        .totalAmountWithoutTax(8585)
+                        .interest(23)
+                        .paymentTerms(30)
+                        .tax(58)
+                        .invoiceNumber(675575L)
                         .build();
+
 
         PaymentStatus paymentStatus =
                 PaymentStatus.builder()
-                        .status("Pending")
+                        .paymentStatusEnum(PaymentStatusEnum.PAID)
                         .payment(payment)
                         .build();
 
         paymentStatusRepository.save(paymentStatus);
     }
-
 }
