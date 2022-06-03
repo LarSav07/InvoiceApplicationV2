@@ -1,8 +1,11 @@
 package com.invoice.entity;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 // todo: dont use lombok
 @Entity
@@ -33,6 +36,9 @@ public class PaymentStatus {
     //https://thorben-janssen.com/jpa-21-how-to-implement-type-converter/
     // https://dzone.com/articles/mapping-enums-done-right
 
+
+
+    // TODO: 02/06/2022 https://vladmihalcea.com/prepersist-preupdate-embeddable-jpa-hibernate/ 
 
     @OneToOne (
             cascade = CascadeType.ALL,

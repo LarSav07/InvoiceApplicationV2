@@ -4,9 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -55,6 +60,30 @@ public class Payment {
     )
     private AccountHolder accountCreditor;
 
+    /*
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @Column(name = "date")
+    private Date date;
+
+        @Column(name = "created_on")
+    private LocalDateTime createdOn;
+
+    */
+    // Find the best method for date
+    @Column(name = "date_created")
+    @Temporal(TemporalType.DATE)
+    private Date createdDate = new Date(System.currentTimeMillis());
+     ////////////////////////
+
+    // todo days to pay rename and make into variable
+    private int daysToPay = 30;
+    LocalDate today = LocalDate.now();
+
+    //adding one day to the localdate
+    @Column(name = "date_due")
+    LocalDate dueDate = today.plusDays(daysToPay);
+
+    //////////////////////////////////
 
     @ManyToOne(
             cascade = CascadeType.ALL,
@@ -65,7 +94,6 @@ public class Payment {
             referencedColumnName = "accountHolderId",
             nullable = false,
             updatable = false
-
     )
     private AccountHolder accountDebtor;
     // todo: ADD Repository and add tests

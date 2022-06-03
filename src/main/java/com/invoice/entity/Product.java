@@ -43,4 +43,5 @@ public class Product {
     )
     private Payment payment;
 
+    // todo need dates variable etc
 }

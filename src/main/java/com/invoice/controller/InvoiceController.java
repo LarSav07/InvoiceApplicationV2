@@ -4,6 +4,10 @@ import com.invoice.service.InvoicePDFExporter;
 import com.invoice.entity.Invoice;
 import com.invoice.exceptions.InvoiceNotFoundException;
 import com.invoice.service.InvoiceService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +38,15 @@ public class InvoiceController {
         return invoiceService.saveInvoice(invoice);
     }
 
+    @Operation(summary = "This is to fetch All the Invoices stored in Db")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Fetched All the Invoices form Db",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404",
+                    description = "Not Available",
+                    content = @Content)
+    })
     @GetMapping("/invoices")
     public List<Invoice> fetchInvoiceList() {
         LOGGER.info("Inside fetchInvoiceList of InvoiceController");
