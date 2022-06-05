@@ -39,13 +39,13 @@ public class AccountHolder {
 
 
     @Column(name="customer_number", unique = true)
-    private Long customerNumber;
+    private Integer customerNumber;
 
     @ManyToOne(
             cascade = CascadeType.ALL
     )
     @JoinColumn(
-            name = "account_id",
+            name = "account_fk",
             referencedColumnName = "account_id"
     )
     private Account account;
@@ -54,7 +54,7 @@ public class AccountHolder {
             cascade = CascadeType.ALL
     )
     @JoinColumn(
-            name = "contact_Id",
+            name = "contact_fk",
             referencedColumnName = "contact_Id"
     )
     private Contact contact;

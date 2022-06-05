@@ -3,8 +3,7 @@ package com.invoice.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Entity
 @Getter
@@ -30,7 +29,7 @@ public class Product {
     private Long productId;
 
     @Column(name= "product_name")
-    private Double productName;
+    private String productName;
 
     @Column(name= "amount")
     private Double amount;

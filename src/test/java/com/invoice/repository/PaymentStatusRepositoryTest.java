@@ -11,8 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class PaymentStatusRepositoryTest {
-
-
     @Autowired
     private PaymentStatusRepository paymentStatusRepository;
 
@@ -21,15 +19,14 @@ class PaymentStatusRepositoryTest {
         AccountHolder accCreditor =
                 AccountHolder.builder()
                         .companyName("Testing")
-                        .customerNumber(2233L)
+                        .customerNumber(2233)
                         .build();
 
         AccountHolder accDebtor =
                 AccountHolder.builder()
                         .companyName("Debtor")
-                        .customerNumber(356L)
+                        .customerNumber(356)
                         .build();
-
 
         Payment payment =
                 Payment.builder()

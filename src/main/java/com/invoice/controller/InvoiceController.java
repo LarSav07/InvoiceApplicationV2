@@ -38,10 +38,10 @@ public class InvoiceController {
         return invoiceService.saveInvoice(invoice);
     }
 
-    @Operation(summary = "This is to fetch All the Invoices stored in Db")
+    @Operation(summary = "This is to fetch All the Invoices")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
-                    description = "Fetched All the Invoices form Db",
+                    description = "Fetched All the Invoices",
                     content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "404",
                     description = "Not Available",

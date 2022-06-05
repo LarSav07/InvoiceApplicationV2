@@ -1,15 +1,10 @@
 package com.invoice.entity;
 
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-//@Embeddable
-@Entity
 @Getter
 @Setter
 @ToString
@@ -17,6 +12,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Builder
 @Table(name = "account")
+@Entity
 public class Account {
 
     @Id
@@ -35,13 +31,13 @@ public class Account {
 
     @NotNull(message = "BIC cannot be empty")
     @Column(name = "bank_identification_code")
-    private Long BIC; // (Bank Identifier Code)
+    private Integer bic;
+
 
     @NotNull(message = "IBAN cannot be empty")
     @Column(name = "iban_number")
-    private Long IBAN;
+    private Integer iban;
 
-    @Column(name = "bank_Name")
-    @Length(max = 10, min = 3)
-    private String BankName;
+    @Column(name = "bank_name")
+    private String bankName;
 }
