@@ -69,6 +69,4 @@ public class InvoiceServiceImpl implements InvoiceService {
     public Invoice fetchInvoiceByCompanyName(String companyName) {
         return invoiceRepository.findByCompanyNameIgnoreCase(companyName);
     }
-
-
 }
