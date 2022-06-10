@@ -8,21 +8,35 @@ import com.invoice.exceptions.InvoiceNotFoundException;
 import java.util.List;
 
 public interface UserInputService {
-    public Account saveAccount(Account account);
+    Account saveAccount(Account account);
 
-    public AccountHolder saveAccount(AccountHolder accountHolder);
+    AccountHolder saveAccount(AccountHolder accountHolder);
 
-    public Contact saveAccount(Contact contact);
+    Contact saveAccount(Contact contact);
 
-    public List<Account> fetchAccountsList();
+    List<Account> fetchAccountsList();
 
-    public List<AccountHolder> fetchAccountHoldersList();
+    List<AccountHolder> fetchAccountHoldersList();
 
-    public List<Contact> fetchContactsList();
+    List<Contact> fetchContactsList();
 
-    public Account fetchAccountByAccountId(Long accountId) throws InvoiceNotFoundException;
+    Account fetchAccountByAccountId(Long accountId) throws InvoiceNotFoundException;
 
-    public AccountHolder fetchAccountHolderByAccountHolderId(Long accountHolderId) throws InvoiceNotFoundException;
+    AccountHolder fetchAccountHolderByAccountHolderId(Long accountHolderId) throws InvoiceNotFoundException;
 
-    public Contact fetchContactByContactId(Long contactId) throws InvoiceNotFoundException;
+    Contact fetchContactByContactId(Long contactId) throws InvoiceNotFoundException;
+
+    void deleteAccountByAccountId(Long accountId);
+
+    void deleteAccountHolderByAccountHolderId(Long accountHolderId);
+
+    void deleteContactByContactId(Long contactId);
+
+    Account updateAccount(Long accountId, Account account);
+
+    Contact updateContact(Long contactId, Contact contact);
+
+    AccountHolder updateAccountHolder(Long accountHolderId, AccountHolder accountHolder);
+
+    AccountHolder fetchInvoiceByCompanyName(String companyName);
 }

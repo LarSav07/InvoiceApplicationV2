@@ -1,8 +1,6 @@
 package com.invoice.entity;
 
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
-
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -58,6 +56,5 @@ public class Contact {
     @NotBlank(message = "Cannot be null")
     @Column(name= "email")
     private String emailAddress;
-
 
 }
