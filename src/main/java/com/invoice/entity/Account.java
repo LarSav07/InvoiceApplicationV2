@@ -3,6 +3,7 @@ package com.invoice.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -38,6 +39,8 @@ public class Account {
     @Column(name = "iban_number")
     private Integer iban;
 
+    @NotNull(message = "Please Enter Bank Name")
+    @NotBlank(message = "Please Enter Bank Name")
     @Column(name = "bank_name")
     private String bankName;
 }

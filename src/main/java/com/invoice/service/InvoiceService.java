@@ -6,14 +6,13 @@ import com.invoice.exceptions.InvoiceNotFoundException;
 import java.util.List;
 
 public interface InvoiceService {
-    public Invoice saveInvoice(Invoice invoice);
+    Invoice saveInvoice(Invoice invoice);
 
-    public List<Invoice> fetchInvoiceList();
+    List<Invoice> fetchInvoiceList();
 
-    public Invoice fetchInvoiceByInvoiceNumber(Long invoiceNumber) throws InvoiceNotFoundException;
+    Invoice fetchInvoiceByInvoiceNumber(Long invoiceNumber) throws InvoiceNotFoundException;
 
-    public void deleteInvoiceByInvoiceNumber(Long invoiceNumber);
-
+    void deleteInvoiceByInvoiceNumber(Long invoiceNumber);
 
     Invoice updateInvoice(Long invoiceNumber, Invoice invoice);
 

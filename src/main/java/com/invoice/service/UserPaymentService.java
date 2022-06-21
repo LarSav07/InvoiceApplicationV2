@@ -4,7 +4,6 @@ import com.invoice.entity.Payment;
 import com.invoice.entity.PaymentStatus;
 import com.invoice.entity.Product;
 import com.invoice.exceptions.InvoiceNotFoundException;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -31,4 +30,7 @@ public interface UserPaymentService {
     void deleteProductByProductId(Long productId);
 
     void deletePaymentStatusById(Long paymentStatusId);
+    Payment updatePayment(Long paymentId, Payment payment);
+
+    Payment fetchPaymentByInvoiceNumber(String invoiceNumber);
 }

@@ -1,5 +1,6 @@
 package com.invoice.service;
 
+import com.invoice.entity.Invoice;
 import com.invoice.entity.Payment;
 import com.invoice.entity.PaymentStatus;
 import com.invoice.entity.Product;
@@ -9,17 +10,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class UserPaymentServiceImpl implements  UserPaymentService {
 
     @Autowired
-    private PaymentRepository  paymentRepository;
+    private PaymentRepository paymentRepository;
     @Autowired
     private PaymentStatusRepository paymentStatusRepository;
     @Autowired
     private ProductRepository productRepository;
+
     @Override
     public Payment savePayment(Payment payment) {
         return paymentRepository.save(payment);
@@ -44,13 +47,14 @@ public class UserPaymentServiceImpl implements  UserPaymentService {
     public List<Product> fetchProductList() {
         return productRepository.findAll();
     }
+
     @Override
     public List<PaymentStatus> fetchPaymentStatusList() {
         return paymentStatusRepository.findAll();
     }
 
     @Override
-    public Payment fetchPaymentByPaymentId(Long paymentId) throws InvoiceNotFoundException  {
+    public Payment fetchPaymentByPaymentId(Long paymentId) throws InvoiceNotFoundException {
         Optional<Payment> payment =
                 paymentRepository.findById(paymentId);
         if (!payment.isPresent()) {
@@ -68,6 +72,7 @@ public class UserPaymentServiceImpl implements  UserPaymentService {
         }
         return product.get();
     }
+
     @Override
     public PaymentStatus fetchPaymentStatusById(Long statusId) throws InvoiceNotFoundException {
         Optional<PaymentStatus> paymentStatus =
@@ -77,6 +82,7 @@ public class UserPaymentServiceImpl implements  UserPaymentService {
         }
         return paymentStatus.get();
     }
+
     @Override
     public void deletePaymentByPaymentId(Long paymentId) {
         paymentRepository.deleteById(paymentId);
@@ -90,5 +96,55 @@ public class UserPaymentServiceImpl implements  UserPaymentService {
     @Override
     public void deletePaymentStatusById(Long paymentStatusId) {
         paymentStatusRepository.deleteById(paymentStatusId);
+    }
+
+    @Override
+    public Payment updatePayment(Long paymentId, Payment payment) {
+        Payment depDB = paymentRepository.findById(paymentId).get();
+        if (Objects.nonNull(payment.getPaymentTerms()))
+        {
+            depDB.setPaymentTerms(payment.getPaymentTerms());
+        }
+        if (Objects.nonNull(payment.getInvoiceNumber()))
+        {
+            depDB.setInvoiceNumber(payment.getInvoiceNumber());
+        }
+        if (Objects.nonNull(payment.getOCR()))
+        {
+            depDB.setOCR(payment.getOCR());
+        }
+        {
+            depDB.setOCR(payment.getOCR());
+        }
+        if (Objects.nonNull(payment.getAccountCreditor()))
+        {
+            depDB.setAccountCreditor(payment.getAccountCreditor());
+        }
+        if(Objects.nonNull(payment.getAccountDebtor()))
+        {
+            depDB.setAccountDebtor(payment.getAccountDebtor());
+        }
+        if(Objects.nonNull(payment.getInterest()))
+        {
+            depDB.setInterest(payment.getInterest());
+        }
+        if(Objects.nonNull(payment.getTax()))
+        {
+            depDB.setTax(payment.getTax());
+        }
+        if(Objects.nonNull(payment.getTotalAmountIncludingTax()))
+        {
+            depDB.setTotalAmountIncludingTax(payment.getTotalAmountIncludingTax());
+        }
+        if (Objects.nonNull(payment.getTotalAmountWithoutTax()))
+        {
+            depDB.setTotalAmountWithoutTax(payment.getTotalAmountWithoutTax());
+        }
+        return paymentRepository.save(depDB);
+    }
+
+    @Override
+    public Payment fetchPaymentByInvoiceNumber(String invoiceNumber) {
+        return paymentRepository.findByInvoiceNumber(invoiceNumber);
     }
 }

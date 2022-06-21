@@ -1,16 +1,20 @@
 package com.invoice.controller;
-import com.invoice.entity.Invoice;
-import com.invoice.entity.Payment;
-import com.invoice.entity.PaymentStatus;
-import com.invoice.entity.Product;
+import com.invoice.entity.*;
 import com.invoice.exceptions.InvoiceNotFoundException;
+import com.invoice.service.InvoicePDFExporter;
+import com.invoice.service.UserInputService;
 import com.invoice.service.UserPaymentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -18,6 +22,8 @@ public class UserPaymentController {
 
     @Autowired
     private UserPaymentService userPaymentService;
+    @Autowired
+    private UserInputService userInputService;
 
     private final Logger LOGGER =
             LoggerFactory.getLogger(InvoiceController.class);
@@ -52,7 +58,7 @@ public class UserPaymentController {
         return userPaymentService.fetchProductList();
     }
 
-    // probably wont need this
+    // probably will not need this
     @GetMapping("/paymentStatus")
     public List<PaymentStatus> fetchPaymentStatusList() {
         LOGGER.info("Inside fetchPaymentStatusList of userPaymentService");
@@ -92,7 +98,38 @@ public class UserPaymentController {
     @DeleteMapping("/paymentStatus/{id}")
     public String deletePaymentStatusById(@PathVariable(value = "id") Long paymentStatusId) {
         userPaymentService.deletePaymentStatusById(paymentStatusId);
-        return "Product deleted Successfully";
+        return "ProductStatus deleted Successfully";
     }
 
+    @PutMapping("/payment/{paymentId}")
+            public Payment updatePayment(@PathVariable ("paymentId") Long paymentId,
+                                         @RequestBody Payment payment) {
+        return userPaymentService.updatePayment(paymentId, payment);
+    }
+
+    @GetMapping("/payment/invoiceNumber/{invoiceNumber}")
+    public Payment fetchPaymentByInvoiceNumber(@PathVariable("invoiceNumber") String invoiceNumber) {
+        return userPaymentService.fetchPaymentByInvoiceNumber(invoiceNumber);
+    }
+
+    @GetMapping("/generateInvoice/export")
+    public void exportToPDF(HttpServletResponse response) throws IOException, InvoiceNotFoundException {
+        response.setContentType("/application/pdf");
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd:HH:mm:ss");
+        String currentDateTime = dateFormat.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
+        response.setHeader(headerKey, headerValue);
+
+        List<Product> productList = userPaymentService.fetchProductList();
+        Payment payment = userPaymentService.fetchPaymentByPaymentId(1L);
+        Account account = userInputService.fetchAccountByAccountId(1L);
+        InvoicePDFExporter exporter = new InvoicePDFExporter(productList, payment, account);
+        exporter.export(response);
+
+    }
 }
+
+

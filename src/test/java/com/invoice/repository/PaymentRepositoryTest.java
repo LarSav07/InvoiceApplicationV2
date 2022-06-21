@@ -57,7 +57,6 @@ class PaymentRepositoryTest {
                         .tax(24.00)
                         .OCR(66766L)
                         .accountDebtor(accDebtor)
-                        .product(product)
                         .accountCreditor(accCreditor)
                         .totalAmountIncludingTax(5545.55)
                         .totalAmountWithoutTax(787787.75)

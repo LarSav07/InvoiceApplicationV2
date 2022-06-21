@@ -85,14 +85,4 @@ public class Payment {
             updatable = false
     )
     private AccountHolder accountDebtor;
-
-    @ManyToOne(
-            cascade = CascadeType.ALL
-    )
-    @JoinColumn(
-            name = "product_id",
-            referencedColumnName = "product_id"
-    )
-    private Product product;
-
 }

@@ -36,4 +36,13 @@ public class Product {
 
     @Column(name= "price")
     private Double price;
+
+    @ManyToOne(
+            cascade = CascadeType.ALL
+    )
+    @JoinColumn(
+            name = "payment_id",
+            referencedColumnName = "paymentId"
+    )
+    private Payment payment;
 }

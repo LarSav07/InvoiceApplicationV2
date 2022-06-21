@@ -79,22 +79,22 @@ public class InvoiceController {
     // todo: complete other endpoints
 
     // Export to PDF
-    @GetMapping("/invoices/export")
-    public void exportToPDF(HttpServletResponse response) throws IOException {
-        response.setContentType("/application/pdf");
-
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd:HH:mm:ss");
-        String currentDateTime = dateFormat.format(new Date());
-
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
-
-        response.setHeader(headerKey, headerValue);
-
-        List<Invoice> listInvoices = invoiceService.fetchInvoiceList();
-
-        InvoicePDFExporter exporter = new InvoicePDFExporter(listInvoices);
-        exporter.export(response);
-    }
+//    @GetMapping("/invoices/export")
+//    public void exportToPDF(HttpServletResponse response) throws IOException {
+//        response.setContentType("/application/pdf");
+//
+//        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd:HH:mm:ss");
+//        String currentDateTime = dateFormat.format(new Date());
+//
+//        String headerKey = "Content-Disposition";
+//        String headerValue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
+//
+//        response.setHeader(headerKey, headerValue);
+//
+//        List<Invoice> listInvoices = invoiceService.fetchInvoiceList();
+//
+//        InvoicePDFExporter exporter = new InvoicePDFExporter(listInvoices);
+//        exporter.export(response);
+//    }
 
 }
