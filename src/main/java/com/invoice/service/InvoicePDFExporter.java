@@ -1,12 +1,16 @@
 package com.invoice.service;
 
+import com.invoice.entity.Account;
 import com.invoice.entity.Invoice;
+import com.invoice.entity.Payment;
+import com.invoice.entity.Product;
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.Image;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.*;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
@@ -17,11 +21,12 @@ import java.util.List;
 // https://knpcode.com/java-programs/generating-pdf-java-using-openpdf-tutorial/
 // https://www.ulfdittmer.com/view?OpenPDFExample
 @AllArgsConstructor
+@NoArgsConstructor
 public class InvoicePDFExporter extends PdfPageEventHelper{
 
-    private final List<Invoice> listInvoices;
-
-    // todo: font use Lato
+    private List<Product> productList;
+    private Payment payment;
+    private Account account;
     //https://stackoverflow.com/questions/29575142/how-to-align-two-paragraphs-to-the-left-and-right-on-the-same-line
 
 
@@ -145,6 +150,7 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
         PdfPCell cell = new PdfPCell();
         cell.setBorder(Rectangle.BOTTOM | Rectangle.TOP);
 
+        // Not sure this is the best way to do this
         FontFactory.register("src/main/java/com/invoice/Font/Lato-Regular.ttf");
         Font font = FontFactory.getFont("Lato-Regular");
         font.setSize(11);
@@ -175,14 +181,14 @@ public class InvoicePDFExporter extends PdfPageEventHelper{
         PdfPCell cell = new PdfPCell();
         cell.setBorder(Rectangle.NO_BORDER);
         table.getDefaultCell().setBorder(Rectangle.NO_BORDER);
-        for (Invoice invoice : listInvoices) {
-            cell.setPhrase(new Phrase(String.valueOf(invoice.getInvoiceNumber()),font));
+        for (Product product : productList) {
+            cell.setPhrase(new Phrase(String.valueOf(product.getProductName()),font));
             table.addCell(cell);
-            cell.setPhrase(new Phrase(String.valueOf(invoice.getCompanyAddress()),font));
+            cell.setPhrase(new Phrase(String.valueOf(product.getAmount()),font));
             table.addCell(cell);
-            cell.setPhrase(new Phrase(String.valueOf(invoice.getCompanyName()),font));
+            cell.setPhrase(new Phrase(String.valueOf(product.getProductName()),font));
             table.addCell(cell);
-            cell.setPhrase(new Phrase(String.valueOf(invoice.getEmailAddress()),font));
+            cell.setPhrase(new Phrase(String.valueOf(product.getPrice()),font));
             table.addCell(cell);
         }
 //        for (Invoice invoice : listInvoices) {

@@ -4,6 +4,10 @@ import com.invoice.service.InvoicePDFExporter;
 import com.invoice.entity.Invoice;
 import com.invoice.exceptions.InvoiceNotFoundException;
 import com.invoice.service.InvoiceService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +38,15 @@ public class InvoiceController {
         return invoiceService.saveInvoice(invoice);
     }
 
+    @Operation(summary = "This is to fetch All the Invoices")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Fetched All the Invoices",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404",
+                    description = "Not Available",
+                    content = @Content)
+    })
     @GetMapping("/invoices")
     public List<Invoice> fetchInvoiceList() {
         LOGGER.info("Inside fetchInvoiceList of InvoiceController");
@@ -66,22 +79,22 @@ public class InvoiceController {
     // todo: complete other endpoints
 
     // Export to PDF
-    @GetMapping("/invoices/export")
-    public void exportToPDF(HttpServletResponse response) throws IOException {
-        response.setContentType("/application/pdf");
-
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd:HH:mm:ss");
-        String currentDateTime = dateFormat.format(new Date());
-
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
-
-        response.setHeader(headerKey, headerValue);
-
-        List<Invoice> listInvoices = invoiceService.fetchInvoiceList();
-
-        InvoicePDFExporter exporter = new InvoicePDFExporter(listInvoices);
-        exporter.export(response);
-    }
+//    @GetMapping("/invoices/export")
+//    public void exportToPDF(HttpServletResponse response) throws IOException {
+//        response.setContentType("/application/pdf");
+//
+//        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd:HH:mm:ss");
+//        String currentDateTime = dateFormat.format(new Date());
+//
+//        String headerKey = "Content-Disposition";
+//        String headerValue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
+//
+//        response.setHeader(headerKey, headerValue);
+//
+//        List<Invoice> listInvoices = invoiceService.fetchInvoiceList();
+//
+//        InvoicePDFExporter exporter = new InvoicePDFExporter(listInvoices);
+//        exporter.export(response);
+//    }
 
 }

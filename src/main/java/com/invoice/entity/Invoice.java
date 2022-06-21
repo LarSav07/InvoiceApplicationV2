@@ -1,21 +1,28 @@
 package com.invoice.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.apache.logging.log4j.message.Message;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+//@Table(
+//        name = "invoice",
+//        uniqueConstraints = @UniqueConstraint(
+//                name = "emailid_unique",
+//                columnNames = "email_address"
+//        )
+//)
 public class Invoice {
 
     @Id
@@ -36,7 +43,17 @@ public class Invoice {
 
     @NotBlank(message = "Please Add Company Name")
     private String companyName;
+
+
     private String companyAddress;
+    @Email(message = "Please Enter a Valid Email")
+    @NotEmpty(message = "Email cannot be empty")
+    @NotNull(message = "Cannot be null")
+    @NotBlank(message = "Cannot be null")
+//    @Column(
+//            name = "email_address",
+//            nullable = false
+//    )
     private String emailAddress;
 
     // todo:  add other fields - should have products quantity etc
@@ -45,4 +62,7 @@ public class Invoice {
     // private Date invoiceDate;
     // private BigDecimal total;
 
+
+    //http://emailregex.com/
+    //https://stackoverflow.com/questions/65370879/javax-validation-constraints-email-in-springboot
 }

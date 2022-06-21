@@ -8,6 +8,10 @@ spring:
     password: password
     url: jdbc:postgresql://localhost:5432/invoice
     username: postgres
+  flyway:
+    locations: "classpath:db/migration"
+    baseline-on-migrate: true
+    enabled: true
   jpa:
     hibernate:
       ddl-auto: update
@@ -16,3 +20,5 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     show-sql: true
+
+

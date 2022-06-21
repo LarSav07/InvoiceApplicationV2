@@ -7,9 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface InvoiceRepository extends JpaRepository <Invoice, Long> {
 
-    public Invoice findByCompanyName(String companyName);
-
-    public Invoice findByCompanyNameIgnoreCase(String companyName);
-
+    Invoice findByCompanyNameIgnoreCase(String companyName);
 
 }
